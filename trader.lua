@@ -333,6 +333,17 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 	end
 end)
 
+mobs:spawn({
+	name = "mobs_npc:trader",
+	nodes = {"default:sandstonebrick"},
+	neighbors = {"group:grass"},
+	min_light = 10,
+	chance = 10000,
+	active_object_count = 1,
+	min_height = 0,
+	day_toggle = true,
+})
+
 mobs:register_egg("mobs_npc:trader", S("Trader"), "default_sandstone.png", 1)
 
 -- compatibility

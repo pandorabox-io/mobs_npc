@@ -123,7 +123,7 @@ mobs:register_mob("mobs_npc:npc", {
 mobs:spawn({
 	name = "mobs_npc:npc",
 	nodes = {"default:brick"},
-	neighbors = {"default:grass_3"},
+	neighbors = {"group:grass"},
 	min_light = 10,
 	chance = 10000,
 	active_object_count = 1,

@@ -117,6 +117,18 @@ mobs:register_mob("mobs_npc:igor", {
 		end
 	end,
 })
+
+mobs:spawn({
+	name = "mobs_npc:igor",
+	nodes = {"default:stonebrick"},
+	neighbors = {"group:grass"},
+	min_light = 10,
+	chance = 10000,
+	active_object_count = 1,
+	min_height = 0,
+	day_toggle = true,
+})
+
 -- register spawn egg
 mobs:register_egg("mobs_npc:igor", S("Igor"), "mobs_meat_raw.png", 1)
 
