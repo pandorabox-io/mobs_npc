@@ -86,7 +86,7 @@ mobs:register_mob("mobs_npc:trader", {
 	on_rightclick = function(self, clicker)
 
 		-- feed to heal npc
-		if mobs:feed_tame(self, clicker, 8, true, true) then return end
+		if mobs:feed_tame(self, clicker, 8, false, true) then return end
 
 		-- capture npc with net or lasso
 		if mobs:capture_mob(self, clicker, nil, 5, 80, false, nil) then return end
@@ -97,8 +97,8 @@ mobs:register_mob("mobs_npc:trader", {
 		local item = clicker:get_wielded_item()
 		local name = clicker:get_player_name()
 
-		-- clicking adult trader with item shows trades
-		if item:get_name() ~= "" and self.child == false then
+		-- right-clicking with item shows trades
+		if item:get_name() ~= "" then
 			self.attack = nil
 			mobs_trader(self, clicker, entity, mobs.human)
 			return
