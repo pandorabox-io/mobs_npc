@@ -75,6 +75,7 @@ mobs:register_mob("mobs_npc:npc", {
 
 		local item = clicker:get_wielded_item()
 		local name = clicker:get_player_name()
+		local mobname = (self.nametag and self.nametag ~= "") and self.nametag or S("NPC")
 
 		-- right clicking with gold lump drops random item from mobs.npc_drops
 		if item:get_name() == "default:gold_lump" then
@@ -94,7 +95,7 @@ mobs:register_mob("mobs_npc:npc", {
 				name = drops[math.random(1, #drops)]
 			})
 
-			minetest.chat_send_player(name, S("NPC dropped you an item for gold!"))
+			minetest.chat_send_player(name, S("@1 dropped you an item for gold!", mobname))
 
 			return
 		end
@@ -110,11 +111,11 @@ mobs:register_mob("mobs_npc:npc", {
 				self:set_animation("stand")
 				self:set_velocity(0)
 
-				minetest.chat_send_player(name, S("NPC stands still."))
+				minetest.chat_send_player(name, S("@1 stands still.", mobname))
 			else
 				self.order = "follow"
 
-				minetest.chat_send_player(name, S("NPC will follow you."))
+				minetest.chat_send_player(name, S("@1 will follow you.", mobname))
 			end
 		end
 	end,

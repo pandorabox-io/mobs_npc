@@ -96,6 +96,7 @@ mobs:register_mob("mobs_npc:trader", {
 
 		local item = clicker:get_wielded_item()
 		local name = clicker:get_player_name()
+		local mobname = (self.nametag and self.nametag ~= "") and self.nametag or S("Trader")
 
 		-- right-clicking with item shows trades
 		if item:get_name() ~= "" and item:get_name() ~= "mobs:nametag" then
@@ -115,11 +116,11 @@ mobs:register_mob("mobs_npc:trader", {
 				self:set_animation("stand")
 				self:set_velocity(0)
 
-				minetest.chat_send_player(name, S("NPC stands still."))
+				minetest.chat_send_player(name, S("@1 stands still.", mobname))
 			else
 				self.order = "follow"
 
-				minetest.chat_send_player(name, S("NPC will follow you."))
+				minetest.chat_send_player(name, S("@1 will follow you.", mobname))
 			end
 		end
 	end,
@@ -218,7 +219,7 @@ function mobs_trader(self, clicker, entity, race)
 			.. self.name .. (math.random(1, 1000) ^ 2)
 	end
 
-	if not self.game_name then
+	if not self.game_name or not self.nametag or self.nametag == "" then
 
 		self.game_name = tostring(race.names[math.random(1, #race.names)])
 		self.nametag = S("Trader @1", self.game_name)
@@ -236,8 +237,8 @@ function mobs_trader(self, clicker, entity, race)
 	local player = clicker:get_player_name()
 
 	minetest.chat_send_player(player,
-		S("[NPC] <Trader @1> Hello, @2, have a look at my wares.",
-		self.game_name, player))
+		S("[NPC] <@1> Hello, @2, have a look at my wares.",
+		self.nametag, player))
 
 	-- Make formspec trade list
 	local formspec_trade_list = ""
@@ -267,7 +268,7 @@ function mobs_trader(self, clicker, entity, race)
 	minetest.show_formspec(player, "mobs_npc:trade", "size[8,10]"
 		.. default.gui_bg_img
 		.. default.gui_slots
-		.. "label[0.5,-0.1;" .. S("Trader @1's stock:", self.game_name) .. "]"
+		.. "label[0.5,-0.1;" .. S("@1's stock:", self.nametag) .. "]"
 		.. formspec_trade_list
 		.. "list[current_player;main;0,6;8,4;]"
 	)
