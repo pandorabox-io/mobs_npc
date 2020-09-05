@@ -61,7 +61,10 @@ mobs:register_mob("mobs_npc:trader", {
 	walk_velocity = 2,
 	run_velocity = 3,
 	jump = false,
-	drops = {},
+	drops = {
+		{name = "default:gold_ingot", chance = 2, min = 1, max = 3},
+		{name = "default:diamond", chance = 6, min = 0, max = 1},
+	},
 	water_damage = 0,
 	lava_damage = 4,
 	light_damage = 0,
