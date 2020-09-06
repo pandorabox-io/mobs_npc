@@ -7,7 +7,7 @@ mobs.human = {
 
 	names = {
 		"Bob", "Duncan", "Bill", "Tom", "James", "Ian", "Lenny",
-		"Dylan", "Ethan"
+		"Dylan", "Ethan", "Jhon", "Alex", "Steve", "Rory", "Brian",
 	},
 
 	items = {
@@ -33,6 +33,12 @@ mobs.human = {
 		{"default:mese_crystal_fragment 1", "default:gold_ingot 5", 90},
 	}
 }
+
+local function set_random_name(self, race)
+	local name = tostring(race.names[math.random(1, #race.names)])
+	self.nametag = S("Trader @1", name)
+	self:update_tag()
+end
 
 -- Trader ( same as NPC but with right-click shop )
 
@@ -88,13 +94,9 @@ mobs:register_mob("mobs_npc:trader", {
 
 	on_rightclick = function(self, clicker)
 
-		-- feed to heal npc
+		-- feed, tame, capture, or protect
 		if mobs:feed_tame(self, clicker, 8, false, true) then return end
-
-		-- capture npc with net or lasso
 		if mobs:capture_mob(self, clicker, nil, 5, 80, false, nil) then return end
-
-		-- protect npc with mobs:protector
 		if mobs:protect(self, clicker) then return end
 
 		local item = clicker:get_wielded_item()
@@ -104,7 +106,7 @@ mobs:register_mob("mobs_npc:trader", {
 		-- right-clicking with item shows trades
 		if item:get_name() ~= "" then
 			self.attack = nil
-			mobs_trader(self, clicker, entity, mobs.human)
+			mobs_trader(self, clicker, mobs.human)
 			return
 		end
 
@@ -130,12 +132,7 @@ mobs:register_mob("mobs_npc:trader", {
 
 	on_spawn = function(self)
 
-		self.nametag = S("Trader")
-
-		self.object:set_properties({
-			nametag = self.nametag,
-			nametag_color = "#FFFFFF"
-		})
+		set_random_name(self, mobs.human)
 
 		return true -- return true so on_spawn is run once only
 	end,
@@ -169,7 +166,7 @@ mobs:register_mob("mobs_npc:trader", {
 -- initially being chosen.  Also the formspec uses item image buttons instead of
 -- inventory slots.
 
-function mobs.add_goods(self, entity, race)
+function mobs.add_goods(self, race)
 
 	local trade_index = 1
 	local trades_already_added = {}
@@ -215,26 +212,19 @@ function mobs.add_goods(self, entity, race)
 end
 
 
-function mobs_trader(self, clicker, entity, race)
+function mobs_trader(self, clicker, race)
 
 	if not self.id then
 		self.id = (math.random(1, 1000) * math.random(1, 10000))
 			.. self.name .. (math.random(1, 1000) ^ 2)
 	end
 
-	if not self.game_name or not self.nametag or self.nametag == "" then
-
-		self.game_name = tostring(race.names[math.random(1, #race.names)])
-		self.nametag = S("Trader @1", self.game_name)
-
-		self.object:set_properties({
-			nametag = self.nametag,
-			nametag_color = "#00FF00"
-		})
+	if self.nametag == nil or self.nametag == "" then
+		set_random_name(self, race)
 	end
 
 	if self.trades == nil then
-		mobs.add_goods(self, entity, race)
+		mobs.add_goods(self, race)
 	end
 
 	local player = clicker:get_player_name()
@@ -286,7 +276,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 
 		local trade = ""
 
-		for k, v in pairs(fields) do
+		for k,_ in pairs(fields) do
 			trade = tostring(k)
 		end
 
@@ -295,7 +285,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 
 		if id ~= nil then
 
-			for k, v in pairs(minetest.luaentities) do
+			for _,v in pairs(minetest.luaentities) do
 
 				if v.object and v.id and v.id == id then
 					self = v
