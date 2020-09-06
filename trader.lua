@@ -102,7 +102,7 @@ mobs:register_mob("mobs_npc:trader", {
 		local mobname = (self.nametag and self.nametag ~= "") and self.nametag or S("Trader")
 
 		-- right-clicking with item shows trades
-		if item:get_name() ~= "" and item:get_name() ~= "mobs:nametag" then
+		if item:get_name() ~= "" then
 			self.attack = nil
 			mobs_trader(self, clicker, entity, mobs.human)
 			return
