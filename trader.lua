@@ -370,11 +370,11 @@ mobs:spawn({
 	neighbors = {"group:grass"},
 	min_light = 10,
 	chance = 10000,
-	active_object_count = 1,
 	min_height = 0,
 	day_toggle = true,
 })
 
+-- register spawn egg
 mobs:register_egg("mobs_npc:trader", S("Trader"), "default_sandstone.png", 1)
 
 -- compatibility
