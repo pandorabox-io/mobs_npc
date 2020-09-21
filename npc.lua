@@ -63,24 +63,25 @@ mobs:register_mob("mobs_npc:npc", {
 	},
 
 	on_rightclick = function(self, clicker)
-		
+
 		-- feed to tame or heal npc
 		if mobs:feed_tame(self, clicker, 8, true, true) then return end
-		
+
 		-- capture npc with net or lasso
 		if mobs:capture_mob(self, clicker, nil, 5, 80, false, nil) then return end
-		
+
 		-- protect npc with mobs:protector
 		if mobs:protect(self, clicker) then return end
-		
+
 		-- right clicking with gold lump drops random item
 		if mobs:npc_drop(self, clicker, S("NPC"), self.npc_drops or mobs.npc_drops) then return end
-		
+
 		-- by right-clicking owner can switch npc between follow and stand
 		mobs:npc_order(self, clicker, S("NPC"))
 	end,
 })
 
+-- register spawning abm
 mobs:spawn({
 	name = "mobs_npc:npc",
 	nodes = {"default:brick"},

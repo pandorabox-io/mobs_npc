@@ -7,5 +7,4 @@ if minetest.get_modpath("lucky_block") then
 		{"spw", "mobs:trader", 1, false, false},
 		{"lig", "fire:permanent_flame"},
 	})
-
 end

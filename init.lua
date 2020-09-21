@@ -5,10 +5,10 @@ local S = minetest.get_translator and minetest.get_translator("mobs_npc") or
 		dofile(path .. "/intllib.lua")
 mobs.intllib = S
 
-function mobs:npc_order(self, clicker, mob_name)
+function mobs.npc_order(self, clicker, mob_name)
 
 	local name = clicker:get_player_name()
-	
+
 	if self.owner and self.owner == name then
 
 		mob_name = (self.nametag and self.nametag ~= "") and self.nametag or mob_name
@@ -29,19 +29,19 @@ function mobs:npc_order(self, clicker, mob_name)
 
 			minetest.chat_send_player(name, S("@1 will follow you.", mob_name))
 		end
-		
+
 		return true
 	end
-	
+
 	return false
 end
 
-function mobs:npc_drop(self, clicker, mob_name, drops)
+function mobs.npc_drop(self, clicker, mob_name, drops)
 
 	local item = clicker:get_wielded_item()
-	
+
 	if item:get_name() == "default:gold_lump" then
-		
+
 		local name = clicker:get_player_name()
 
 		mob_name = (self.nametag and self.nametag ~= "") and self.nametag or mob_name

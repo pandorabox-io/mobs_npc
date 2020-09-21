@@ -61,7 +61,6 @@ end
 local function match_trade(trades, trade)
 
 	for _,v in pairs(trades) do
-
 		if v[1] == trade[1] and v[2] == trade[2] then
 			return v
 		end
@@ -131,7 +130,6 @@ local function show_trades(self, clicker)
 		if self.trades[i] ~= nil then
 
 			local x, y
-
 			if i < 6 then
 				x = 0.5
 				y = i - 0.5
@@ -141,7 +139,6 @@ local function show_trades(self, clicker)
 			end
 
 			local trade = self.trades[i]
-
 			local payment = trade[4] and trade[1] or (trade[2] .." ".. trade[3])
 			local item = trade[4] and (trade[2] .." ".. trade[3]) or trade[1]
 
@@ -190,16 +187,16 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 			if trade_id ~= nil and self.trades[trade_id] ~= nil then
 
 				local trade = self.trades[trade_id]
-
 				local payment = trade[4] and trade[1] or (trade[2] .." ".. trade[3])
 				local item = trade[4] and (trade[2] .." ".. trade[3]) or trade[1]
-
 				local inv = player:get_inventory()
 
 				if inv:contains_item("main", payment) then
 
+					-- take payment
 					inv:remove_item("main", payment)
 
+					-- give items to player
 					local leftover = inv:add_item("main", item)
 
 					-- drop excess items at the player's feet
@@ -222,6 +219,7 @@ local function check_trades(self)
 
 	local trade_total = 0
 
+	-- count up all the trades that have been made
 	for _,v in pairs(self.trades) do
 		trade_total = trade_total + (v[5] or 0)
 	end
@@ -326,13 +324,13 @@ mobs:register_mob("mobs_npc:trader", {
 
 		-- feed to tame or heal npc
 		if mobs:feed_tame(self, clicker, 8, false, true) then return end
-		
+
 		-- capture npc with net or lasso
 		if mobs:capture_mob(self, clicker, nil, 5, 80, false, nil) then return end
-		
+
 		-- protect npc with mobs:protector
 		if mobs:protect(self, clicker) then return end
-		
+
 		-- right-clicking with an item shows trades
 		if clicker:get_wielded_item():get_name() ~= "" then
 			self.attack = nil
@@ -355,6 +353,7 @@ mobs:register_mob("mobs_npc:trader", {
 
 		local day_count = minetest.get_day_count()
 
+		-- check the day's trades
 		if self.day_count and self.day_count < day_count then
 			self.day_count = day_count
 			check_trades(self)
@@ -364,6 +363,7 @@ mobs:register_mob("mobs_npc:trader", {
 	end,
 })
 
+-- register spawning abm
 mobs:spawn({
 	name = "mobs_npc:trader",
 	nodes = {"default:sandstonebrick"},
