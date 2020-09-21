@@ -63,61 +63,21 @@ mobs:register_mob("mobs_npc:npc", {
 	},
 
 	on_rightclick = function(self, clicker)
-
-		-- feed to heal npc
+		
+		-- feed to tame or heal npc
 		if mobs:feed_tame(self, clicker, 8, true, true) then return end
-
+		
 		-- capture npc with net or lasso
 		if mobs:capture_mob(self, clicker, nil, 5, 80, false, nil) then return end
-
+		
 		-- protect npc with mobs:protector
 		if mobs:protect(self, clicker) then return end
-
-		local item = clicker:get_wielded_item()
-		local name = clicker:get_player_name()
-		local mobname = (self.nametag and self.nametag ~= "") and self.nametag or S("NPC")
-
-		-- right clicking with gold lump drops random item from mobs.npc_drops
-		if item:get_name() == "default:gold_lump" then
-
-			if not mobs.is_creative(name) then
-				item:take_item()
-				clicker:set_wielded_item(item)
-			end
-
-			local pos = self.object:get_pos()
-
-			pos.y = pos.y + 0.5
-
-			local drops = self.npc_drops or mobs.npc_drops
-
-			minetest.add_item(pos, {
-				name = drops[math.random(1, #drops)]
-			})
-
-			minetest.chat_send_player(name, S("@1 dropped you an item for gold!", mobname))
-
-			return
-		end
-
+		
+		-- right clicking with gold lump drops random item
+		if mobs:npc_drop(self, clicker, S("NPC"), self.npc_drops or mobs.npc_drops) then return end
+		
 		-- by right-clicking owner can switch npc between follow and stand
-		if self.owner and self.owner == name then
-
-			if self.order == "follow" then
-
-				self.attack = nil
-				self.order = "stand"
-				self.state = "stand"
-				self:set_animation("stand")
-				self:set_velocity(0)
-
-				minetest.chat_send_player(name, S("@1 stands still.", mobname))
-			else
-				self.order = "follow"
-
-				minetest.chat_send_player(name, S("@1 will follow you.", mobname))
-			end
-		end
+		mobs:npc_order(self, clicker, S("NPC"))
 	end,
 })
 

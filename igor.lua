@@ -64,58 +64,23 @@ mobs:register_mob("mobs_npc:igor", {
 		punch_start = 200,
 		punch_end = 219,
 	},
-	-- right clicking with raw meat will give Igor more health
+
 	on_rightclick = function(self, clicker)
-
-		-- feed to heal npc
+		
+		-- feed to tame or heal npc
 		if mobs:feed_tame(self, clicker, 8, false, true) then return end
-		if mobs:protect(self, clicker) then return end
+		
+		-- capture npc with net or lasso
 		if mobs:capture_mob(self, clicker, nil, 5, 80, false, nil) then return end
-
-		local item = clicker:get_wielded_item()
-		local name = clicker:get_player_name()
-		local mobname = (self.nametag and self.nametag ~= "") and self.nametag or S("Igor")
-
-		-- right clicking with gold lump drops random item from mobs.npc_drops
-		if item:get_name() == "default:gold_lump" then
-
-			if not mobs.is_creative(name) then
-				item:take_item()
-				clicker:set_wielded_item(item)
-			end
-
-			local pos = self.object:get_pos()
-
-			pos.y = pos.y + 0.5
-
-			local drops = self.igor_drops or mobs.igor_drops
-
-			minetest.add_item(pos, {
-				name = drops[math.random(1, #drops)]
-			})
-
-			minetest.chat_send_player(name, S("@1 dropped you an item for gold!", mobname))
-
-			return
-		end
-
-		-- if owner switch between follow and stand
-		if self.owner and self.owner == name then
-
-			if self.order == "follow" then
-
-				self.attack = nil
-				self.order = "stand"
-				self.state = "stand"
-				self:set_animation("stand")
-				self:set_velocity(0)
-
-				minetest.chat_send_player(name, S("@1 stands still.", mobname))
-			else
-				self.order = "follow"
-				minetest.chat_send_player(name, S("@1 will follow you.", mobname))
-			end
-		end
+		
+		-- protect npc with mobs:protector
+		if mobs:protect(self, clicker) then return end
+		
+		-- right clicking with gold lump drops random item
+		if mobs:npc_drop(self, clicker, S("Igor"), self.igor_drops or mobs.igor_drops) then return end
+		
+		-- by right-clicking owner can switch npc between follow and stand
+		mobs:npc_order(self, clicker, S("Igor"))
 	end,
 })
 

@@ -324,40 +324,24 @@ mobs:register_mob("mobs_npc:trader", {
 
 	on_rightclick = function(self, clicker)
 
-		-- feed, tame, capture, or protect
+		-- feed to tame or heal npc
 		if mobs:feed_tame(self, clicker, 8, false, true) then return end
+		
+		-- capture npc with net or lasso
 		if mobs:capture_mob(self, clicker, nil, 5, 80, false, nil) then return end
+		
+		-- protect npc with mobs:protector
 		if mobs:protect(self, clicker) then return end
-
-		local item = clicker:get_wielded_item()
-		local name = clicker:get_player_name()
-		local mobname = (self.nametag and self.nametag ~= "") and self.nametag or S("Trader")
-
-		-- right-clicking with item shows trades
-		if item:get_name() ~= "" then
+		
+		-- right-clicking with an item shows trades
+		if clicker:get_wielded_item():get_name() ~= "" then
 			self.attack = nil
 			show_trades(self, clicker)
 			return
 		end
 
 		-- by right-clicking owner can switch npc between follow and stand
-		if self.owner and self.owner == name then
-
-			if self.order == "follow" then
-
-				self.attack = nil
-				self.order = "stand"
-				self.state = "stand"
-				self:set_animation("stand")
-				self:set_velocity(0)
-
-				minetest.chat_send_player(name, S("@1 stands still.", mobname))
-			else
-				self.order = "follow"
-
-				minetest.chat_send_player(name, S("@1 will follow you.", mobname))
-			end
-		end
+		mobs:npc_order(self, clicker, S("Trader"))
 	end,
 
 	on_spawn = function(self)
