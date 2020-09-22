@@ -1,6 +1,12 @@
 
 local S = mobs.intllib
 
+local trading_players = {}
+
+minetest.register_on_leaveplayer(function(player)
+	trading_players[player:get_player_name()] = nil
+end)
+
 -- define table containing names for use and shop items for sale
 mobs.trader = {
 
@@ -91,7 +97,6 @@ end
 
 local function setup_trader(self)
 
-	self.id = (math.random(1, 1000) * math.random(1, 10000)) .. self.name .. (math.random(1, 1000) ^ 2)
 	self.day_count = minetest.get_day_count()
 	self.trade_count = 0
 	self.trades = {}
@@ -110,7 +115,7 @@ end
 
 local function show_trades(self, clicker)
 
-	if not self.id or not self.day_count or not self.trade_count or not self.trades then
+	if not self.day_count or not self.trade_count or not self.trades then
 		setup_trader(self)
 	end
 
@@ -119,6 +124,8 @@ local function show_trades(self, clicker)
 	end
 
 	local player = clicker:get_player_name()
+
+	trading_players[player] = self
 
 	minetest.chat_send_player(player, S("[NPC] <@1> Hello, @2, have a look at my wares.", self.nametag, player))
 
@@ -148,8 +155,8 @@ local function show_trades(self, clicker)
 
 			if trade[5] > 0 then
 				formspec = formspec ..
-					"item_image_button[".. x ..",".. y ..";1,1;".. payment ..";".. self.id .."#".. i ..";]"..
-					"item_image_button[".. x + 2 ..",".. y ..";1,1;".. item ..";".. self.id .."#".. i ..";]"..
+					"item_image_button[".. x ..",".. y ..";1,1;".. payment ..";".. i ..";]"..
+					"item_image_button[".. x + 2 ..",".. y ..";1,1;".. item ..";".. i ..";]"..
 					"image[".. x + 1 ..",".. y ..";1,1;mobs_gui_arrow.png]"
 			else
 				formspec = formspec ..
@@ -165,71 +172,59 @@ end
 
 minetest.register_on_player_receive_fields(function(player, formname, fields)
 
-	if formname ~= "mobs_npc:trade" then return end
+	if formname ~= "mobs_npc:trade" or not player or not fields then return end
 
-	if fields and not fields.quit then
+	local name = player:get_player_name()
 
-		local itemcode = ""
+	if fields.quit then
+		-- clear from trading players
+		trading_players[name] = nil
+	else
+
+		local self = trading_players[name]
+
+		local trade_id = ""
 
 		for k,_ in pairs(fields) do
-			itemcode = tostring(k)
+			trade_id = tonumber(k)
 		end
 
-		local id = itemcode:split("#")[1]
-		local self = nil
+		if self ~= nil and trade_id ~= nil and self.trades[trade_id] ~= nil then
 
-		-- find the trader
-		if id ~= nil then
-			for _,v in pairs(minetest.luaentities) do
+			local trade = self.trades[trade_id]
 
-				if v.object and v.id and v.id == id then
-					self = v
-					break
-				end
+			if trade[5] <= 0 then
+				-- out of stock, update formspec
+				show_trades(self, player)
+				return
 			end
-		end
 
-		if self ~= nil then
+			local payment = trade[4] and trade[1] or (trade[2] .." ".. trade[3])
+			local item = trade[4] and (trade[2] .." ".. trade[3]) or trade[1]
+			local inv = player:get_inventory()
 
-			local trade_id = tonumber(itemcode:split("#")[2])
+			if inv:contains_item("main", payment) then
 
-			if trade_id ~= nil and self.trades[trade_id] ~= nil then
+				-- take payment
+				inv:remove_item("main", payment)
 
-				local trade = self.trades[trade_id]
+				-- give items to player
+				local leftover = inv:add_item("main", item)
 
-				if trade[5] <= 0 then
-					-- out of stock, update formspec
-					show_trades(self, player)
-					return
+				-- drop excess items at the player's feet
+				if leftover:get_count() > 0 then
+					minetest.add_item(player:get_pos(), leftover)
 				end
 
-				local payment = trade[4] and trade[1] or (trade[2] .." ".. trade[3])
-				local item = trade[4] and (trade[2] .." ".. trade[3]) or trade[1]
-				local inv = player:get_inventory()
+				-- count the trade
+				self.trade_count = self.trade_count + 1
 
-				if inv:contains_item("main", payment) then
+				-- remove from stock
+				self.trades[trade_id][5] = trade[5] - 1
 
-					-- take payment
-					inv:remove_item("main", payment)
-
-					-- give items to player
-					local leftover = inv:add_item("main", item)
-
-					-- drop excess items at the player's feet
-					if leftover:get_count() > 0 then
-						minetest.add_item(player:get_pos(), leftover)
-					end
-
-					-- count the trade
-					self.trade_count = self.trade_count + 1
-
-					-- remove from stock
-					self.trades[trade_id][5] = trade[5] - 1
-
-					-- update formspec if trade is now out of stock
-					if trade[5] <= 0 then
-						show_trades(self, player)
-					end
+				-- update formspec if trade is now out of stock
+				if trade[5] <= 0 then
+					show_trades(self, player)
 				end
 			end
 		end
