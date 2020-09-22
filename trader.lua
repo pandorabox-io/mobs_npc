@@ -127,8 +127,6 @@ local function show_trades(self, clicker)
 
 	trading_players[player] = self
 
-	minetest.chat_send_player(player, S("[NPC] <@1> Hello, @2, have a look at my wares.", self.nametag, player))
-
 	local formspec =
 		"size[8,10]"..
 		default.gui_bg_img ..
