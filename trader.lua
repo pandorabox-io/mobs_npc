@@ -196,55 +196,54 @@ local function check_trades(self)
 	-- should never be nil, but check just in case
 	if self.trades == nil or self.trade_count == nil then return end
 
-	if self.trade_count > 0 then
+	for k,v in pairs(self.trades) do
 
-		for k,v in pairs(self.trades) do
+		local trade = match_trade(mobs.trader.items, v)
 
-			local trade = match_trade(mobs.trader.items, v)
+		if not trade then
 
-			if not trade then
-
-				-- invalid trade, replace or remove it
-				if #mobs.trader.items >= 10 then
-					self.trades[k] = get_random_trade(self, nil)
-				else
-					table.remove(self.trades, k)
-				end
+			-- invalid trade, replace or remove it
+			if #mobs.trader.items >= 10 then
+				self.trades[k] = get_random_trade(self, nil)
 			else
-				-- if not traded
-				if v[5] == trade[5] and math.random(5) == 1 then
+				table.remove(self.trades, k)
+			end
 
-					-- better price or change trade
-					if v[4] and v[3] < trade[4] then
+		elseif self.trade_count > 0 then
 
-						self.trades[k][3] = v[3] + 1
+			-- if not traded
+			if v[5] == trade[5] and math.random(5) == 1 then
 
-					elseif not v[4] and v[3] > trade[3] then
+				-- better price or change trade
+				if v[4] and v[3] < trade[4] then
 
-						self.trades[k][3] = v[3] - 1
+					self.trades[k][3] = v[3] + 1
 
-					elseif #mobs.trader.items > 10 then
+				elseif not v[4] and v[3] > trade[3] then
 
-						self.trades[k] = get_random_trade(self, nil)
-					end
+					self.trades[k][3] = v[3] - 1
 
-				-- if traded too much
-				elseif v[5] <= 0 and math.random(2) == 1 then
+				elseif #mobs.trader.items > 10 then
 
-					-- worse price
-					if v[4] and v[3] > trade[3] then
-
-						self.trades[k][3] = v[3] - 1
-
-					elseif not v[4] and v[3] < trade[4] then
-
-						self.trades[k][3] = v[3] + 1
-					end
+					self.trades[k] = get_random_trade(self, nil)
 				end
 
-				-- restock trade
-				self.trades[k][5] = trade[5]
+			-- if traded too much
+			elseif v[5] <= 0 and math.random(2) == 1 then
+
+				-- worse price
+				if v[4] and v[3] > trade[3] then
+
+					self.trades[k][3] = v[3] - 1
+
+				elseif not v[4] and v[3] < trade[4] then
+
+					self.trades[k][3] = v[3] + 1
+				end
 			end
+
+			-- restock trade
+			self.trades[k][5] = trade[5]
 		end
 	end
 

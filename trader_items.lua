@@ -30,14 +30,42 @@ mobs.trader.items = {
 }
 
 -- check that all trade items are good to use
+
+local function is_valid_trade(i, t)
+
+	local item = type(t[1]) == "string" and t[1]:split(" ") or nil
+
+	if not item or not minetest.registered_items[item[1]] or not tonumber(item[2]) or tonumber(item[2]) <= 0 then
+		return false, "trade #".. i .." item is invalid"
+	end
+
+	if not type(t[2]) == "string" or not minetest.registered_items[t[2]] then
+		return false, "trade #".. i .." currency is invalid"
+	end
+
+	if not type(t[3]) == "number" or not type(t[4]) == "number" or t[3] > t[4] or t[3] < 1 or t[4] < 1 then
+		return false, "trade #".. i .." price is invalid"
+	end
+
+	if not type(t[5]) == "number" or t[5] < 1 then
+		return false, "trade #".. i .." stock is invalid"
+	end
+
+	if not type(t[6]) == "number" or t[6] < 0 or t[6] > 100 then
+		return false, "trade #".. i .." rarity is invalid"
+	end
+
+	return true, nil
+end
+
 minetest.register_on_mods_loaded(function()
-	for _,v in pairs(mobs.trader.items) do
-		assert(type(v[1]) == "string" and
-			type(v[1]) == "string" and
-			type(v[3]) == "number" and
-			type(v[4]) == "number" and
-			type(v[5]) == "number" and
-			type(v[6]) == "number"
-			,"invalid mobs trader item")
+	for k,v in pairs(mobs.trader.items) do
+
+		local valid, err_msg = is_valid_trade(k, v)
+
+		if not valid then
+			minetest.log("error", "[mobs_npc] ".. err_msg .. ", removing trade #".. k)
+			table.remove(mobs.trader.items, k)
+		end
 	end
 end)
