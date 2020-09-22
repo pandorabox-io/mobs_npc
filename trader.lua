@@ -11,31 +11,33 @@ mobs.trader = {
 	},
 
 	items = {
-		-- {item, currency, min price, max price, rarity, high trade amount}
-		{"default:apple 10", "default:gold_ingot", 1, 3, 10, 30},
-		{"farming:bread 10", "default:gold_ingot", 1, 4, 5, 30},
-		{"default:clay 10", "default:gold_ingot", 2, 5, 12, 100},
-		{"default:brick 10", "default:gold_ingot", 2, 6, 17, 100},
-		{"default:glass 10", "default:gold_ingot", 1, 4, 17, 100},
-		{"default:obsidian 10", "default:gold_ingot", 5, 15, 50, 60},
-		{"default:diamond 1", "default:gold_ingot", 5, 10, 40, 25},
-		{"farming:wheat 10", "default:gold_ingot", 1, 4, 17, 50},
-		{"default:tree 10", "default:gold_ingot", 1, 4, 20, 80},
-		{"default:stone 20", "default:gold_ingot", 1, 3, 17, 100},
-		{"default:desert_stone 10", "default:gold_ingot", 1, 4, 27, 100},
-		{"default:sapling 5", "default:gold_ingot", 1, 3, 7, 30},
-		{"default:pick_steel 1", "default:gold_ingot", 1, 4, 7, 10},
-		{"default:sword_steel 1", "default:gold_ingot", 1, 3, 17, 10},
-		{"default:shovel_steel 1", "default:gold_ingot", 1, 3, 17, 10},
-		{"default:cactus 5", "default:gold_ingot", 2, 5, 40, 30},
-		{"default:papyrus 10", "default:gold_ingot", 2, 6, 40, 50},
-		{"default:mese_crystal 1", "default:dirt_with_grass", 5, 10, 90, 100},
-		{"default:mese_crystal 1", "default:gold_ingot", 4, 8, 80, 100},
-		{"default:sandstone 10", "default:gold_ingot", 1, 4, 20, 80},
-		{"default:dirt 10", "default:gold_ingot", 1, 3, 10, 80},
-		{"bucket:bucket_water 1", "default:gold_ingot", 1, 3, 20, 10},
-		{"bucket:bucket_river_water 1", "default:gold_ingot", 2, 4, 30, 20},
-		{"bucket:bucket_lava 1", "default:gold_ingot", 3, 8, 50, 20},
+		-- {item, currency, min price, max price, daily stock, rarity}
+		{"default:apple 10",			"default:gold_ingot",		1,		3,		30,		10},
+		{"farming:bread 10",			"default:gold_ingot",		1,		4,		30,		5},
+		{"default:clay 10",				"default:gold_ingot",		2,		5,		100,	12},
+		{"default:brick 10",			"default:gold_ingot",		2,		6,		100,	17},
+		{"default:glass 10",			"default:gold_ingot",		1,		4,		100,	17},
+		{"default:obsidian 10",			"default:gold_ingot",		5,		15,		60,		50},
+		{"default:diamond 1",			"default:mese_crystal",		1,		3,		25,		40},
+		{"default:diamond 1",			"default:gold_ingot",		5,		10,		25,		40},
+		{"farming:wheat 10",			"default:gold_ingot",		1,		4,		50,		17},
+		{"default:tree 10",				"default:gold_ingot",		1,		4,		80,		20},
+		{"default:stone 20",			"default:gold_ingot",		1,		3,		100,	17},
+		{"default:desert_stone 10",		"default:gold_ingot",		1,		4,		100,	27},
+		{"default:sapling 5",			"default:gold_ingot",		1,		3,		30,		7},
+		{"default:pick_steel 1",		"default:gold_ingot",		1,		4,		10,		7},
+		{"default:sword_steel 1",		"default:gold_ingot",		1,		3,		10,		17},
+		{"default:shovel_steel 1",		"default:gold_ingot",		1,		3,		10,		17},
+		{"default:cactus 5",			"default:gold_ingot",		2,		5,		30,		40},
+		{"default:papyrus 10",			"default:gold_ingot",		2,		6,		50,		40},
+		{"default:mese_crystal 1",		"default:dirt_with_grass",	6,		10,		30,		90},
+		{"default:mese_crystal 1",		"default:gold_ingot",		3,		6,		30,		80},
+		{"default:sandstone 10",		"default:gold_ingot",		1,		4,		80,		20},
+		{"default:dirt 10",				"default:gravel",			8,		12,		80,		15},
+		{"default:dirt 10",				"default:gold_ingot",		1,		3,		80,		10},
+		{"bucket:bucket_water 1",		"default:gold_ingot",		1,		3,		10,		20},
+		{"bucket:bucket_river_water 1",	"default:gold_ingot",		2,		4,		10,		30},
+		{"bucket:bucket_lava 1",		"default:gold_ingot",		3,		8,		10,		50},
 	}
 }
 
@@ -73,7 +75,7 @@ local function get_random_trade(self, trade)
 	-- select a random trade if not supplied
 	while trade == nil do
 		local rt = mobs.trader.items[math.random(#mobs.trader.items)]
-		if not match_trade(self.trades, rt) and math.random(100) >= rt[5] then
+		if not match_trade(self.trades, rt) and math.random(100) >= rt[6] then
 			trade = rt
 		end
 	end
@@ -82,14 +84,16 @@ local function get_random_trade(self, trade)
 	local payment = trade[2]
 	local price = math.random(trade[3], trade[4])
 	local is_reverse = math.random(3) == 1
+	local stock = trade[5]
 
-	return {item, payment, price, is_reverse, 0}
+	return {item, payment, price, is_reverse, stock}
 end
 
 local function setup_trader(self)
 
 	self.id = (math.random(1, 1000) * math.random(1, 10000)) .. self.name .. (math.random(1, 1000) ^ 2)
 	self.day_count = minetest.get_day_count()
+	self.trade_count = 0
 	self.trades = {}
 
 	if #mobs.trader.items > 10 then
@@ -106,7 +110,7 @@ end
 
 local function show_trades(self, clicker)
 
-	if not self.id or not self.day_count or not self.trades then
+	if not self.id or not self.day_count or not self.trade_count or not self.trades then
 		setup_trader(self)
 	end
 
@@ -142,12 +146,17 @@ local function show_trades(self, clicker)
 			local payment = trade[4] and trade[1] or (trade[2] .." ".. trade[3])
 			local item = trade[4] and (trade[2] .." ".. trade[3]) or trade[1]
 
-			formspec = formspec ..
-				"item_image_button[".. x ..",".. y ..";1,1;"..
-					payment ..";".. self.id .."#".. i ..";]"..
-				"item_image_button[".. x + 2 ..",".. y ..";1,1;"..
-					item ..";".. self.id .."#".. i ..";]"..
-				"image[".. x + 1 ..",".. y ..";1,1;gui_arrow_blank.png]"
+			if trade[5] > 0 then
+				formspec = formspec ..
+					"item_image_button[".. x ..",".. y ..";1,1;".. payment ..";".. self.id .."#".. i ..";]"..
+					"item_image_button[".. x + 2 ..",".. y ..";1,1;".. item ..";".. self.id .."#".. i ..";]"..
+					"image[".. x + 1 ..",".. y ..";1,1;mobs_gui_arrow.png]"
+			else
+				formspec = formspec ..
+					"item_image[".. x ..",".. y ..";1,1;".. payment .."]"..
+					"item_image[".. x + 2 ..",".. y ..";1,1;".. item .."]"..
+					"image[".. x + 1 ..",".. y ..";1,1;mobs_gui_cross.png]"
+			end
 		end
 	end
 
@@ -187,6 +196,13 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 			if trade_id ~= nil and self.trades[trade_id] ~= nil then
 
 				local trade = self.trades[trade_id]
+
+				if trade[5] <= 0 then
+					-- out of stock, update formspec
+					show_trades(self, player)
+					return
+				end
+
 				local payment = trade[4] and trade[1] or (trade[2] .." ".. trade[3])
 				local item = trade[4] and (trade[2] .." ".. trade[3]) or trade[1]
 				local inv = player:get_inventory()
@@ -205,7 +221,15 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 					end
 
 					-- count the trade
-					self.trades[trade_id][5] = trade[5] + 1
+					self.trade_count = self.trade_count + 1
+
+					-- remove from stock
+					self.trades[trade_id][5] = trade[5] - 1
+
+					-- update formspec if trade is now out of stock
+					if trade[5] <= 0 then
+						show_trades(self, player)
+					end
 				end
 			end
 		end
@@ -215,25 +239,25 @@ end)
 local function check_trades(self)
 
 	-- should never be nil, but check just in case
-	if self.trades == nil then return end
+	if self.trades == nil or self.trade_count == nil then return end
 
-	local trade_total = 0
-
-	-- count up all the trades that have been made
-	for _,v in pairs(self.trades) do
-		trade_total = trade_total + (v[5] or 0)
-	end
-
-	if trade_total > 10 then
+	if self.trade_count > 0 then
 
 		for k,v in pairs(self.trades) do
 
 			local trade = match_trade(mobs.trader.items, v)
 
-			if trade then
+			if not trade then
 
+				-- invalid trade, replace or remove it
+				if #mobs.trader.items >= 10 then
+					self.trades[k] = get_random_trade(self, nil)
+				else
+					table.remove(self.trades, k)
+				end
+			else
 				-- if not traded
-				if v[5] == 0 and math.random(5) == 1 then
+				if v[5] == trade[5] and math.random(5) == 1 then
 
 					-- better price or change trade
 					if v[4] and v[3] < trade[4] then
@@ -250,7 +274,7 @@ local function check_trades(self)
 					end
 
 				-- if traded too much
-				elseif v[5] > trade[6] and math.random(2) == 1 then
+				elseif v[5] <= 0 and math.random(2) == 1 then
 
 					-- worse price
 					if v[4] and v[3] > trade[3] then
@@ -262,12 +286,14 @@ local function check_trades(self)
 						self.trades[k][3] = v[3] + 1
 					end
 				end
-			end
 
-			-- reset count
-			self.trades[k][5] = 0
+				-- restock trade
+				self.trades[k][5] = trade[5]
+			end
 		end
 	end
+
+	self.trade_count = 0
 end
 
 mobs:register_mob("mobs_npc:trader", {
@@ -339,7 +365,7 @@ mobs:register_mob("mobs_npc:trader", {
 		end
 
 		-- by right-clicking owner can switch npc between follow and stand
-		mobs:npc_order(self, clicker, S("Trader"))
+		mobs.npc_order(self, clicker, S("Trader"))
 	end,
 
 	on_spawn = function(self)

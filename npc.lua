@@ -74,10 +74,10 @@ mobs:register_mob("mobs_npc:npc", {
 		if mobs:protect(self, clicker) then return end
 
 		-- right clicking with gold lump drops random item
-		if mobs:npc_drop(self, clicker, S("NPC"), self.npc_drops or mobs.npc_drops) then return end
+		if mobs.npc_drop(self, clicker, S("NPC"), self.npc_drops or mobs.npc_drops) then return end
 
 		-- by right-clicking owner can switch npc between follow and stand
-		mobs:npc_order(self, clicker, S("NPC"))
+		mobs.npc_order(self, clicker, S("NPC"))
 	end,
 })
 
