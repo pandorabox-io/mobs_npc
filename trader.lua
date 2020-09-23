@@ -169,11 +169,24 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 				inv:remove_item("main", payment)
 
 				-- give items to player
-				local leftover = inv:add_item("main", item)
+				local stack = ItemStack(item)
+				local amount = stack:get_count()
+				local stack_max = stack:get_stack_max()
 
-				-- drop excess items at the player's feet
-				if leftover:get_count() > 0 then
-					minetest.add_item(player:get_pos(), leftover)
+				while amount > 0 do
+
+					local to_add = math.min(amount, stack_max)
+
+					stack:set_count(to_add)
+
+					local leftover = inv:add_item("main", stack)
+
+					-- drop excess items at the player's feet
+					if leftover:get_count() > 0 then
+						minetest.add_item(player:get_pos(), leftover)
+					end
+
+					amount = amount - to_add
 				end
 
 				-- count the trade
