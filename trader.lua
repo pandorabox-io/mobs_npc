@@ -51,7 +51,7 @@ local function get_random_trade(self, trade)
 	local item = trade[1]
 	local payment = trade[2]
 	local price = math.random(trade[3], trade[4])
-	local is_reverse = math.random(3) == 1
+	local is_reverse = trade[7] == nil and math.random(3) == 1 or trade[7]
 	local stock = trade[5]
 
 	return {item, payment, price, is_reverse, stock}
@@ -209,36 +209,42 @@ local function check_trades(self)
 				table.remove(self.trades, k)
 			end
 
-		elseif self.trade_count > 0 then
+		else
 
-			-- if not traded
-			if v[5] == trade[5] and math.random(5) == 1 then
+			if trade[7] ~= nil and v[4] ~= trade[7] then
 
-				-- better price or change trade
-				if v[4] and v[3] < trade[4] then
+				-- current trade direction is not allowed, change it
+				self.trades[k][4] = trade[7]
+			end
 
-					self.trades[k][3] = v[3] + 1
+			if v[3] < trade[3] or v[3] > trade[4] then
 
-				elseif not v[4] and v[3] > trade[3] then
+				-- min or max price was changed, set new random price
+				self.trades[k][3] = math.random(trade[3], trade[4])
 
-					self.trades[k][3] = v[3] - 1
+			elseif self.trade_count > 0 then
 
-				elseif #mobs.trader.items > 10 then
+				-- if not traded
+				if v[5] == trade[5] and math.random(5) == 1 then
 
-					self.trades[k] = get_random_trade(self, nil)
-				end
+					-- better price or change trade
+					if v[3] > trade[3] and v[3] < trade[4] then
 
-			-- if traded too much
-			elseif v[5] <= 0 and math.random(2) == 1 then
+						self.trades[k][3] = v[3] + (v[4] and 1 or -1)
 
-				-- worse price
-				if v[4] and v[3] > trade[3] then
+					elseif #mobs.trader.items > 10 then
 
-					self.trades[k][3] = v[3] - 1
+						self.trades[k] = get_random_trade(self, nil)
+					end
 
-				elseif not v[4] and v[3] < trade[4] then
+				-- if out of stock
+				elseif v[5] <= 0 and math.random(2) == 1 then
 
-					self.trades[k][3] = v[3] + 1
+					-- worse price
+					if v[3] > trade[3] and v[3] < trade[4] then
+
+						self.trades[k][3] = v[3] + (v[4] and -1 or 1)
+					end
 				end
 			end
 
