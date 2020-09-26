@@ -1,4 +1,18 @@
 
+-- example
+
+-- {"default:obsidian 10", "default:gold_ingot", 5, 10, 30, 40, nil}
+--[[{
+	"default:obsidian 10", -- item = what will be traded, as an itemstack string.
+	"default:gold_ingot", -- currency = what will used as payment, as an item string.
+	5, -- min price = minimum anount of currency, as a whole number greater than 0, less than or equal to max price.
+	10, -- max price = maximum anount of currency, as a whole number greater than 0, greater than or equal to min price.
+	30, -- daily stock = how many times the item can be traded each day, as a whole number greater than 0.
+	40, -- rarity = how likely the item will be pick as a trade, as a whole number between 0-100 (higher is more rare).
+	nil -- is reverse = whether the trade will be reversed, false for never, true for always, nil for random.
+}]]
+
+
 -- items grouped by mod
 
 local mod_items = {}
