@@ -40,6 +40,7 @@ mod_items.default = {
 	{"default:coral_cyan 1", "default:gold_ingot", 1, 3, 20, 40, nil},
 	{"default:coral_green 1", "default:gold_ingot", 1, 3, 20, 40, nil},
 	{"default:coral_pink 1", "default:gold_ingot", 1, 3, 20, 40, nil},
+	{"default:coral_skeleton 1", "default:gold_ingot", 1, 3, 20, 40, nil},
 	{"default:coral_brown 1", "default:gold_ingot", 2, 4, 20, 50, false},
 	{"default:coral_orange 1", "default:gold_ingot", 2, 4, 20, 50, false},
 	{"default:sand_with_kelp 1", "default:gold_ingot", 1, 3, 20, 30, nil},
