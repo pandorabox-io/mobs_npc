@@ -115,8 +115,8 @@ local function show_trades(self, clicker)
 
 			if trade[5] > 0 then
 				formspec = formspec ..
-					"item_image_button[".. x ..",".. y ..";1,1;".. payment ..";".. i ..";]"..
-					"item_image_button[".. x + 2 ..",".. y ..";1,1;".. item ..";".. i ..";]"..
+					"item_image_button[".. x ..",".. y ..";1,1;".. payment ..";payment#".. i ..";]"..
+					"item_image_button[".. x + 2 ..",".. y ..";1,1;".. item ..";item#".. i ..";]"..
 					"image[".. x + 1 ..",".. y ..";1,1;mobs_gui_arrow.png]"
 			else
 				formspec = formspec ..
@@ -146,8 +146,10 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 		local trade_id = ""
 
 		for k,_ in pairs(fields) do
-			trade_id = tonumber(k)
+			trade_id = tostring(k)
 		end
+
+		trade_id = tonumber(trade_id:split("#")[2])
 
 		if self ~= nil and trade_id ~= nil and self.trades[trade_id] ~= nil then
 
