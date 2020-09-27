@@ -51,8 +51,8 @@ mod_items.default = {
 	{"default:sandstone 20", "default:gold_ingot", 1, 4, 50, 10, nil},
 	{"default:obsidian 10", "default:gold_ingot", 5, 10, 30, 40, nil},
 
-	{"default:apple 10", "default:gold_ingot", 1, 3, 10, 5, false},
-	{"default:blueberries 10", "default:gold_ingot", 2, 4, 10, 20, false},
+	{"default:apple 20", "default:gold_ingot", 1, 3, 10, 5, nil},
+	{"default:blueberries 10", "default:gold_ingot", 2, 4, 10, 20, nil},
 	{"default:book 1", "default:gold_ingot", 1, 3, 10, 20, false},
 	{"default:brick 10", "default:gold_ingot", 2, 5, 20, 30, false},
 
@@ -74,8 +74,8 @@ mod_items.default = {
 
 -- https://github.com/minetest/minetest_game/tree/master/mods/bucket
 mod_items.bucket = {
-	{"bucket:bucket_water 1", "default:gold_ingot", 1, 3, 20, 10, nil},
-	{"bucket:bucket_river_water 1", "default:gold_ingot", 2, 4, 20, 20, nil},
+	{"bucket:bucket_water 1", "default:gold_ingot", 1, 3, 20, 10, false},
+	{"bucket:bucket_river_water 1", "default:gold_ingot", 2, 4, 20, 20, false},
 	{"bucket:bucket_lava 1", "default:gold_ingot", 3, 5, 20, 30, nil},
 
 	{"bucket:bucket_empty 5", "default:gold_ingot", 1, 4, 20, 20, nil},
@@ -108,22 +108,18 @@ mod_items.farming = {
 	{"default:gold_ingot 1", "farming:seed_oat", 1, 5, 10, 40, true},
 	{"default:gold_ingot 1", "farming:seed_rice", 1, 5, 10, 40, true},
 	{"default:gold_ingot 1", "farming:seed_rye", 1, 5, 10, 40, true},
-	{"default:gold_ingot 1", "farming:seed_wheat", 1, 5, 10, 40, true},
+	{"default:gold_ingot 1", "farming:seed_wheat", 1, 5, 10, 10, true},
 	{"default:gold_ingot 1", "farming:tomato", 1, 5, 20, 10, true},
 
 	{"farming:melon_8 1", "default:gold_ingot", 1, 3, 10, 40, false},
 	{"farming:pumpkin_8 1", "default:gold_ingot", 1, 3, 10, 40, false},
 	{"farming:pineapple 1", "default:gold_ingot", 3, 6, 10, 50, false},
 
-	{"ethereal:banana 1", "default:gold_ingot", 10, 30, 10, 70, nil},
-	{"ethereal:orange 1", "default:gold_ingot", 10, 30, 10, 50, nil},
-	{"ethereal:strawberry 1", "default:gold_ingot", 10, 30, 10, 50, nil},
-
 	{"farming:baked_potato 10", "default:gold_ingot", 1, 3, 10, 10, false},
 	{"farming:bread 10", "default:gold_ingot", 1, 3, 10, 5, false},
 	{"farming:chocolate_dark 5", "default:gold_ingot", 1, 3, 10, 20, false},
-	{"farming:carrot_gold 5", "default:gold_ingot", 1, 3, 10, 20, false},
-	{"farming:straw 10", "default:gold_ingot", 1, 3, 10, 20, nil},
+	{"farming:carrot_gold 1", "default:gold_ingot", 1, 3, 10, 20, false},
+	{"farming:straw 10", "default:gold_ingot", 1, 3, 10, 20, false},
 }
 
 -- https://github.com/minetest-mods/moreores
@@ -152,10 +148,10 @@ mod_items.moretrees = {
 	{"moretrees:rubber_tree_sapling 1", "default:gold_ingot", 1, 3, 10, 30, false},
 	{"moretrees:fir_sapling 1", "default:gold_ingot", 1, 3, 10, 30, false},
 
-	{"default:gold_ingot 1", "moretrees:acorn", 10, 20, 20, 40, nil},
-	{"default:gold_ingot 1", "moretrees:cedar_cone", 10, 20, 20, 40, nil},
-	{"default:gold_ingot 1", "moretrees:fir_cone", 10, 20, 20, 40, nil},
-	{"default:gold_ingot 1", "moretrees:spruce_cone", 10, 20, 20, 40, nil},
+	{"default:gold_ingot 1", "moretrees:acorn", 10, 20, 10, 40, nil},
+	{"default:gold_ingot 1", "moretrees:cedar_cone", 10, 20, 10, 40, nil},
+	{"default:gold_ingot 1", "moretrees:fir_cone", 10, 20, 10, 40, nil},
+	{"default:gold_ingot 1", "moretrees:spruce_cone", 10, 20, 10, 40, nil},
 	{"default:gold_ingot 2", "moretrees:date", 10, 20, 10, 40, nil},
 	{"default:gold_ingot 2", "moretrees:coconut", 10, 20, 10, 40, nil},
 }
@@ -163,7 +159,7 @@ mod_items.moretrees = {
 -- https://github.com/runsy/cool_trees/tree/master/cherrytree
 mod_items.cherrytree = {
 	{"cherrytree:sapling 1", "default:gold_ingot", 1, 3, 10, 30, false},
-	{"cherrytree:cherries 5", "default:gold_ingot", 8, 10, 5, 50, nil},
+	{"cherrytree:cherries 5", "default:gold_ingot", 1, 10, 10, 50, nil},
 }
 
 -- https://notabug.org/TenPlus1/mobs_redo
@@ -175,14 +171,14 @@ mod_items.mobs = {
 
 -- https://notabug.org/TenPlus1/mobs_animal
 mod_items.mobs_animal = {
-	{"mobs:chicken_feather 1", "default:gold_ingot", 2, 5, 5, 50, nil},
+	{"mobs:chicken_feather 1", "default:gold_ingot", 2, 5, 10, 50, nil},
 	{"mobs:chicken_raw 1", "default:gold_ingot", 1, 3, 10, 50, nil},
 	{"mobs:egg 12", "default:gold_ingot", 2, 5, 10, 40, nil},
 	{"mobs:bucket_milk 1", "default:gold_ingot", 1, 3, 20, 40, nil},
 	{"mobs:mutton_raw 2", "default:gold_ingot", 1, 3, 10, 50, nil},
 	{"mobs:pork_raw 3", "default:gold_ingot", 1, 4, 10, 50, nil},
 	{"mobs:rabbit_hide 1", "default:gold_ingot", 1, 3, 10, 50, nil},
-	{"mobs:rabbit_raw 2", "default:gold_ingot", 1, 3, 10, 50, nil},
+	{"mobs:rabbit_raw 1", "default:gold_ingot", 1, 3, 10, 50, nil},
 	{"mobs:beehive 1", "default:gold_ingot", 15, 20, 1, 50, nil},
 
 	{"mobs_animal:rat 1", "default:gold_ingot", 5, 10, 10, 30, nil},
