@@ -359,8 +359,6 @@ mobs:register_mob("mobs_npc:trader", {
 			self.day_count = day_count
 			check_trades(self)
 		end
-
-		return true -- return true so the rest of the mob api is executed
 	end,
 })
 

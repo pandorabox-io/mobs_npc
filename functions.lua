@@ -13,6 +13,17 @@ function mobs.npc_order(self, clicker, mob_name)
 
 		if self.order == "follow" then
 
+			self.order = "wander"
+
+			minetest.chat_send_player(name, S("@1 wanders around.", mob_name))
+
+		elseif self.order == "stand" then
+
+			self.order = "follow"
+
+			minetest.chat_send_player(name, S("@1 will follow you.", mob_name))
+
+		else
 			self.order = "stand"
 
 			self.state = "stand"
@@ -20,10 +31,6 @@ function mobs.npc_order(self, clicker, mob_name)
 			self:set_velocity(0)
 
 			minetest.chat_send_player(name, S("@1 stands still.", mob_name))
-		else
-			self.order = "follow"
-
-			minetest.chat_send_player(name, S("@1 will follow you.", mob_name))
 		end
 
 		return true

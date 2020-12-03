@@ -23,7 +23,6 @@ mobs:register_mob("mobs_npc:npc", {
 	collisionbox = {-0.35,-1.0,-0.35, 0.35,0.8,0.35},
 	visual = "mesh",
 	mesh = "mobs_character.b3d",
-	drawtype = "front",
 	textures = {
 		{"mobs_npc.png"},
 		{"mobs_npc2.png"}, -- female by nuttmeg20
