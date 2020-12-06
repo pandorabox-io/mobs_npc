@@ -11,13 +11,13 @@ function mobs.npc_order(self, clicker, mob_name)
 
 		self.attack = nil
 
-		if self.order == "follow" then
+		if self.order == "stand" then
 
 			self.order = "wander"
 
 			minetest.chat_send_player(name, S("@1 wanders around.", mob_name))
 
-		elseif self.order == "stand" then
+		elseif self.order == "wander" then
 
 			self.order = "follow"
 
