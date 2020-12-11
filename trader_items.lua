@@ -85,6 +85,7 @@ mod_items.bucket = {
 mod_items.farming = {
 	{"default:gold_ingot 1", "farming:beans", 1, 5, 10, 40, true},
 	{"default:gold_ingot 1", "farming:beetroot", 1, 5, 10, 40, true},
+	{"default:gold_ingot 1", "farming:blackberry", 1, 5, 10, 40, true},
 	{"default:gold_ingot 1", "farming:blueberries", 1, 5, 10, 40, true},
 	{"default:gold_ingot 1", "farming:cabbage", 1, 5, 10, 40, true},
 	{"default:gold_ingot 1", "farming:carrot", 1, 5, 20, 10, true},
@@ -95,6 +96,7 @@ mod_items.farming = {
 	{"default:gold_ingot 1", "farming:cucumber", 1, 5, 20, 10, true},
 	{"default:gold_ingot 1", "farming:garlic", 1, 5, 10, 40, true},
 	{"default:gold_ingot 1", "farming:grapes", 1, 5, 10, 40, true},
+	{"default:gold_ingot 1", "farming:lettuce", 1, 5, 10, 40, true},
 	{"default:gold_ingot 1", "farming:onion", 1, 5, 10, 40, true},
 	{"default:gold_ingot 1", "farming:pea_pod", 1, 5, 10, 40, true},
 	{"default:gold_ingot 1", "farming:pepper", 1, 5, 10, 40, true},
