@@ -67,7 +67,7 @@ local crops = {
 	["farming:vanilla_8"] = {"farming:vanilla_1", "farming:vanilla"},
 }
 
--- Itsms that need to be crafted into seeds before planting
+-- Items that need to be crafted into seeds before planting
 -- [item] = {{output1, amount1}, {output2, amount2}, ...}
 local seed_crafts = {
 	["farming:garlic"] = {{"farming:garlic_clove", 8}},
@@ -291,6 +291,8 @@ mobs:register_mob("mobs_npc:farmer", {
 		if mobs:feed_tame(self, clicker, 8, false, true) then return end
 		-- Capture npc with net or lasso
 		if mobs:capture_mob(self, clicker, nil, 5, 80, false, nil) then return end
+		-- Lock or unlock by right-clicking with paper
+		if mobs.npc_lock(self, clicker, S("Farmer")) then return end
 		-- Protect npc with mobs:protector
 		if mobs:protect(self, clicker) then return end
 		-- Right clicking with seeds gives them to the farmer
@@ -362,7 +364,7 @@ mobs:register_mob("mobs_npc:farmer", {
 		for _,v in pairs(to_drop) do
 			item = v[1]
 			count = v[2]
-			-- Seperate stacks for count greater than max
+			-- Separate stacks for count greater than max
 			while count > 0 do
 				drop_count = math.min(count, ItemStack(item):get_stack_max())
 				obj = minetest.add_item(pos, {name = item, count = drop_count})
