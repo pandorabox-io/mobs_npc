@@ -1,5 +1,5 @@
 
--- example
+-- Example
 
 -- {"default:obsidian 10", "default:gold_ingot", 5, 10, 30, 40, nil}
 --[[{
@@ -13,7 +13,7 @@
 }]]
 
 
--- items grouped by mod
+-- Items grouped by mod
 
 local mod_items = {}
 
@@ -244,17 +244,17 @@ mod_items.technic = {
 	{"technic:mineral_sulfur 5", "default:gold_ingot", 10, 15, 4, 60, false},
 }
 
--- check for each of the mods, and add it's items if it exists
+-- Check for each of the mods, and add it's items if it exists
 for k,v in pairs(mod_items) do
 	if minetest.get_modpath(k) and #v > 0 then
 		for i=1, #v do
-			mobs.trader.items[#mobs.trader.items + 1] = v[i]
+			mobs.trader.items[#mobs.trader.items+1] = v[i]
 		end
 	end
 end
 
 
--- individual items
+-- Individual items
 
 local items = {
 	-- https://github.com/mt-mods/redwood
@@ -273,54 +273,45 @@ local items = {
 	["pandorabox_custom:panda_viking_set"] = {"pandorabox_custom:panda_viking_set 1","default:gold_ingot",20,30,2,80,nil},
 }
 
--- check for each individual item, and add it if it exists
+-- Check for each individual item, and add it if it exists
 for k,v in pairs(items) do
 	if minetest.registered_items[k] then
-		mobs.trader.items[#mobs.trader.items + 1] = v
+		mobs.trader.items[#mobs.trader.items+1] = v
 	end
 end
 
 
--- check that all trade items are good to use after all mods have been loaded
+-- Check that all trade items are good to use after all mods have been loaded
 
 local function is_valid_trade(i, t)
-
 	local item = type(t[1]) == "string" and t[1]:split(" ") or nil
-
 	if not item or not minetest.registered_items[item[1]] or not tonumber(item[2]) or tonumber(item[2]) <= 0 then
-		return false, "trade #".. i .." item is invalid"
+		return false, "trade #"..i.." item is invalid"
 	end
-
 	if type(t[2]) ~= "string" or not minetest.registered_items[t[2]] then
-		return false, "trade #".. i .." currency is invalid"
+		return false, "trade #"..i.." currency is invalid"
 	end
-
 	if type(t[3]) ~= "number" or type(t[4]) ~= "number" or t[3] > t[4] or t[3] < 1 or t[4] < 1 then
-		return false, "trade #".. i .." price is invalid"
+		return false, "trade #"..i.." price is invalid"
 	end
-
 	if type(t[5]) ~= "number" or t[5] < 1 then
-		return false, "trade #".. i .." stock is invalid"
+		return false, "trade #"..i.." stock is invalid"
 	end
-
 	if type(t[6]) ~= "number" or t[6] < 0 or t[6] > 100 then
-		return false, "trade #".. i .." rarity is invalid"
+		return false, "trade #"..i.." rarity is invalid"
 	end
-
 	if t[7] and type(t[7]) ~= "boolean" then
-		return false, "trade #".. i .." direction is invalid"
+		return false, "trade #"..i.." direction is invalid"
 	end
-
 	return true, nil
 end
 
 minetest.register_on_mods_loaded(function()
 	for k,v in pairs(mobs.trader.items) do
 		local valid, err_msg = is_valid_trade(k, v)
-
 		if not valid then
-			minetest.log("error", "[mobs_npc] ".. err_msg)
-			minetest.log("action", "[mobs_npc] removing trade: ".. dump(v))
+			minetest.log("error", "[mobs_npc] "..err_msg)
+			minetest.log("action", "[mobs_npc] removing trade: "..dump(v))
 			table.remove(mobs.trader.items, k)
 		end
 	end
