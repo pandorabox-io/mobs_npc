@@ -14,6 +14,7 @@ dofile(MP.."/functions.lua")
 dofile(MP.."/npc.lua")  -- NPC by TenPlus1
 dofile(MP.."/igor.lua")  -- Igor by TenPlus1
 dofile(MP.."/trader.lua")  -- Trader by TenPlus1, reworked by OgelGames
+dofile(MP .. "/farmer.lua") -- Farmer by OgelGames
 
 -- Trader items
 dofile(MP.."/trader_items.lua")
