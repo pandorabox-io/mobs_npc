@@ -87,6 +87,11 @@ local function show_trades(self, clicker)
 
 	local player = clicker:get_player_name()
 
+	if self.locked and self.owner and self.owner ~= player then
+		minetest.chat_send_player(player, S("@1 is owner!", self.owner))
+		return
+	end
+
 	trading_players[player] = self
 
 	local formspec =
@@ -171,25 +176,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 				inv:remove_item("main", payment)
 
 				-- give items to player
-				local stack = ItemStack(item)
-				local amount = stack:get_count()
-				local stack_max = stack:get_stack_max()
-
-				while amount > 0 do
-
-					local to_add = math.min(amount, stack_max)
-
-					stack:set_count(to_add)
-
-					local leftover = inv:add_item("main", stack)
-
-					-- drop excess items at the player's feet
-					if leftover:get_count() > 0 then
-						minetest.add_item(player:get_pos(), leftover)
-					end
-
-					amount = amount - to_add
-				end
+				mobs.give_to_player(player, item)
 
 				-- count the trade
 				self.trade_count = self.trade_count + 1
@@ -328,6 +315,9 @@ mobs:register_mob("mobs_npc:trader", {
 
 		-- capture npc with net or lasso
 		if mobs:capture_mob(self, clicker, nil, 5, 80, false, nil) then return end
+
+		-- lock or unlock by right-clicking with paper
+		if mobs.npc_lock(self, clicker, S("Trader")) then return end
 
 		-- protect npc with mobs:protector
 		if mobs:protect(self, clicker) then return end
