@@ -233,7 +233,7 @@ local function do_farming(self)
 			end
 			-- Replant
 			if plant_crop(self, p, nn) then
-				minetest.sound_play("default_grass_footstep", {p = p, gain = 1.0})
+				minetest.sound_play("default_grass_footstep", {pos = p, gain = 1.0})
 				return true
 			end
 		elseif nn == "default:jungletree" then
@@ -247,10 +247,12 @@ local function do_farming(self)
 			-- Plant a crop
 			p.y = p.y + 1
 			if plant_crop(self, p) then
-				minetest.sound_play("default_place_node", {p = p, gain = 1.0})
-				-- Replace (hoe and wet) the soil
-				p.y = p.y - 1
-				minetest.set_node(p, {name = soils[nn]})
+				minetest.sound_play("default_place_node", {pos = p, gain = 1.0})
+				if soils[nn] ~= nn then
+					-- Replace (hoe and wet) the soil
+					p.y = p.y - 1
+					minetest.set_node(p, {name = soils[nn]})
+				end
 				return true
 			end
 		end
@@ -301,7 +303,7 @@ mobs:register_mob("mobs_npc:farmer", {
 		punch_start = 200,
 		punch_end = 219,
 	},
-	stay_near = {look_for_nodes, 10},  -- Make the farmers go towards nodes to "farm"
+	stay_near = {look_for_nodes, 10},  -- Makes the farmer go towards nodes to "farm"
 	on_rightclick = function(self, clicker)
 		-- Feed to tame or heal npc
 		if mobs:feed_tame(self, clicker, 8, false, true) then return end
@@ -314,10 +316,10 @@ mobs:register_mob("mobs_npc:farmer", {
 		-- Right clicking with seeds gives them to the farmer
 		local item = clicker:get_wielded_item()
 		local item_name = item:get_name()
-		local player_name = clicker:get_player_name()
+		local player = clicker:get_player_name()
 		if seed_items[item_name] then
 			add_to_inv(self, item_name, 1)
-			if not mobs.is_creative(player_name) then
+			if not mobs.is_creative(player) then
 				item:take_item()
 				clicker:set_wielded_item(item)
 			end
@@ -325,19 +327,21 @@ mobs:register_mob("mobs_npc:farmer", {
 		end
 		-- Right clicking with gold lump gives some of the farmed items
 		if item_name == "default:gold_lump" then
-			if not self.locked or (self.owner and self.owner ~= player_name) then
-				if not mobs.is_creative(player_name) then
-					item:take_item()
-					clicker:set_wielded_item(item)
-				end
-				local name, count = next(self.inv or {})
-				if name and count then
-					count = math.min(count, ItemStack(name):get_stack_max())
-					mobs.give_to_player(clicker, name.." "..count)
-					remove_from_inv(self, name, count)
-				end
+			if self.locked and self.owner and self.owner ~= player then
+				minetest.chat_send_player(player, S("@1 is owner!", self.owner))
 				return
 			end
+			if not mobs.is_creative(player) then
+				item:take_item()
+				clicker:set_wielded_item(item)
+			end
+			local name, count = next(self.inv or {})
+			if name and count then
+				count = math.min(count, ItemStack(name):get_stack_max())
+				mobs.give_to_player(clicker, name.." "..count)
+				remove_from_inv(self, name, count)
+			end
+			return
 		end
 		-- By right-clicking owner can switch npc between follow and stand
 		mobs.npc_order(self, clicker, S("Farmer"))
