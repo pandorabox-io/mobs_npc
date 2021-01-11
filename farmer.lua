@@ -154,6 +154,9 @@ local function use_seed(self, seed)
 		return true
 	end
 	-- Find what seed can be crafted from
+	if not craft_lookup[seed] then
+		return false  -- No craft available
+	end
 	local crafts = {}
 	for _,item in pairs(craft_lookup[seed]) do
 		if self.inv[item] then
