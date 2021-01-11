@@ -24,6 +24,8 @@ local soils = {
 	["default:dry_dirt"] = "farming:dry_soil_wet",
 	["farming:dry_soil"] = "farming:dry_soil_wet",
 	["farming:dry_soil_wet"] = "farming:dry_soil_wet",
+	-- For cocoa
+	["default:jungletree"] = "default:jungletree",
 }
 
 -- Crops ready to harvest and replant
@@ -65,6 +67,9 @@ local crops = {
 	["farming:tomato_8"] = {"farming:tomato_1", "farming:tomato"},
 	["farming:wheat_8"] = {"farming:wheat_1", "farming:seed_wheat"},
 	["farming:vanilla_8"] = {"farming:vanilla_1", "farming:vanilla"},
+	-- Empty beanpole/trellis
+	["farming:beanpole"] = {"farming:beanpole_1", "farming:beans", "farming:beanpole"},
+	["farming:trellis"] = {"farming:grapes_1", "farming:grapes", "farming:trellis"},
 }
 
 -- Items that need to be crafted into seeds before planting
@@ -170,11 +175,15 @@ end
 
 local function plant_crop(self, pos, crop)
 	if not crop then
-		-- Find what farmer has seeds for
+		-- Find what farmer can plant
 		local can_plant = {}
 		for k,v in pairs(crops) do
-			if (not v[3] or self.inv[v[3]]) and have_seed(self, v[2]) then
-				table.insert(can_plant, k)
+			  -- Exclude cocoa, beanpole, and trellis
+			if k ~= "farming:cocoa_4" and k ~= "farming:beanpole" and k ~= "farming:trellis" then
+				-- Check if seeds are available
+				if (not v[3] or self.inv[v[3]]) and have_seed(self, v[2]) then
+					table.insert(can_plant, k)
+				end
 			end
 		end
 		if #can_plant == 0 then
@@ -225,6 +234,13 @@ local function do_farming(self)
 			-- Replant
 			if plant_crop(self, p, nn) then
 				minetest.sound_play("default_grass_footstep", {p = p, gain = 1.0})
+				return true
+			end
+		elseif nn == "default:jungletree" then
+			-- Plant cocoa on jungletree
+			p.y = p.y + 1
+			if plant_crop(self, p, "farming:cocoa_4") then
+				minetest.sound_play("default_place_node", {pos = p, gain = 1.0})
 				return true
 			end
 		elseif is_near_water(p) then
