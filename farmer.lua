@@ -272,7 +272,7 @@ local function do_farming(self)
 					return true
 				end
 			end
-		elseif nn == "default:jungletree" then
+		elseif nn == "default:jungletree" and air_above(p) then
 			-- Plant cocoa on jungletree
 			p.y = p.y + 1
 			if plant_crop(self, p, "farming:cocoa_4") then
