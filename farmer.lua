@@ -454,3 +454,15 @@ mobs:spawn({
 
 -- Register spawn egg
 mobs:register_egg("mobs_npc:farmer", S("Farmer"), "default_coniferous_litter.png", 1)
+
+-- Override melon and pumpkin so they don't suffocate farmer
+for _,n in pairs({"farming:melon_8", "farming:pumpkin_8"}) do
+	local def = minetest.registered_nodes["farming:melon_8"]
+	if def then
+		local groups = table.copy(def.groups or {})
+		groups.disable_suffocation = 1
+		minetest.override_item("farming:melon_8", {
+		  groups = groups
+		})
+	end
+end
