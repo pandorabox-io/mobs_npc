@@ -177,6 +177,7 @@ local function use_seed(self, seed)
 	return false
 end
 
+
 local function plant_crop(self, pos, crop)
 	if not crop then
 		-- Find what farmer can plant
@@ -215,6 +216,19 @@ local function find_nodes(pos)
 	return minetest.find_nodes_in_area(pos1, pos2, look_for_nodes)
 end
 
+local function soil_below(pos, crop)
+	local below_pos = {x=pos.x, y=pos.y-1, z=pos.z}
+	local nn = minetest.get_node(below_pos).name
+	if nn == "default:jungletree" then
+		if crop == "farming:cocoa_4" then
+			return true
+		end
+	elseif nn == "farming:dry_soil_wet" or nn == "farming:soil_wet" then
+		return true
+	end
+	return false
+end
+
 local function air_above(pos)
 	local above_pos = {x=pos.x, y=pos.y+1, z=pos.z}
 	local nn = minetest.get_node(above_pos).name
@@ -246,15 +260,17 @@ local function do_farming(self)
 	for _,p in pairs(find_nodes(pos)) do
 		local nn = minetest.get_node(p).name
 		if crops[nn] then
-			-- Harvest and add items to virtual inventory
-			for _,i in pairs(minetest.get_node_drops(nn)) do
-				local item = string.split(i, " ")
-				add_to_inv(self, item[1], item[2] or 1)
-			end
-			-- Replant
-			if plant_crop(self, p, nn) then
-				minetest.sound_play("default_grass_footstep", {pos = p, gain = 1.0})
-				return true
+			if soil_below(p, nn) then
+				-- Harvest and add items to virtual inventory
+				for _,i in pairs(minetest.get_node_drops(nn)) do
+					local item = string.split(i, " ")
+					add_to_inv(self, item[1], item[2] or 1)
+				end
+				-- Replant
+				if plant_crop(self, p, nn) then
+					minetest.sound_play("default_grass_footstep", {pos = p, gain = 1.0})
+					return true
+				end
 			end
 		elseif nn == "default:jungletree" then
 			-- Plant cocoa on jungletree
