@@ -101,6 +101,7 @@ end
 local look_for_nodes = {}
 -- Seeds and items for planting
 local seed_items = {}
+
 for k in pairs(soils) do
 	table.insert(look_for_nodes, k)
 end
@@ -211,7 +212,23 @@ end
 local function find_nodes(pos)
 	local pos1 = {x=pos.x-1, y=pos.y-1, z=pos.z-1}
 	local pos2 = {x=pos.x+1, y=pos.y+1, z=pos.z+1}
-	return minetest.find_nodes_in_area_under_air(pos1, pos2, look_for_nodes)
+	return minetest.find_nodes_in_area(pos1, pos2, look_for_nodes)
+end
+
+local function air_above(pos)
+	local above_pos = {x=pos.x, y=pos.y+1, z=pos.z}
+	local nn = minetest.get_node(above_pos).name
+	if nn == "air" then
+		return true
+	elseif nn == "ignore" then
+		return false
+	else
+		local def = minetest.registered_nodes[nn]
+		if def and def.drawtype == "airlike" and def.buildable_to then
+			return true
+		end
+	end
+	return false
 end
 
 local function is_near_water(pos)
@@ -246,7 +263,7 @@ local function do_farming(self)
 				minetest.sound_play("default_place_node", {pos = p, gain = 1.0})
 				return true
 			end
-		elseif is_near_water(p) then
+		elseif air_above(p) and is_near_water(p) then
 			-- Plant a crop
 			p.y = p.y + 1
 			if plant_crop(self, p) then
