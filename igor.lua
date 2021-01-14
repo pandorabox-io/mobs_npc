@@ -83,6 +83,7 @@ mobs:spawn({
 	min_light = 10,
 	chance = 10000,
 	min_height = 0,
+	active_object_count = 2,
 })
 
 -- Register spawn egg

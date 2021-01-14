@@ -81,6 +81,7 @@ mobs:spawn({
 	chance = 10000,
 	min_height = 0,
 	day_toggle = true,
+	active_object_count = 2,
 })
 
 -- Register spawn egg
