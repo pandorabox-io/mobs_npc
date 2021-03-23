@@ -31,6 +31,7 @@ local soils = {
 -- Crops ready to harvest and replant
 -- [ripe_plant] = {new_plant, seed_item, <extra_item>}
 local crops = {
+	["farming:artichoke_5"] = {"farming:artichoke_1", "farming:artichoke"},
 	["farming:barley_7"] = {"farming:barley_1", "farming:seed_barley"},
 	["farming:beanpole_5"] = {"farming:beanpole_1", "farming:beans", "farming:beanpole"},
 	["farming:beetroot_5"] = {"farming:beetroot_1", "farming:beetroot"},
@@ -52,6 +53,7 @@ local crops = {
 	["farming:mint_4"] = {"farming:mint_1", "farming:seed_mint"},
 	["farming:oat_8"] = {"farming:oat_1", "farming:seed_oat"},
 	["farming:onion_5"] = {"farming:onion_1", "farming:onion"},
+	["farming:parsley_3"] = {"farming:parsley_1", "farming:parsley"},
 	["farming:pea_5"] = {"farming:pea_1", "farming:pea_pod"},
 	["farming:pepper_5"] = {"farming:pepper_1", "farming:peppercorn"},
 	["farming:pepper_6"] = {"farming:pepper_1", "farming:peppercorn"},
