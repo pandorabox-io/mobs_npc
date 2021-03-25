@@ -459,11 +459,11 @@ mobs:register_egg("mobs_npc:farmer", S("Farmer"), "default_coniferous_litter.png
 
 -- Override melon and pumpkin so they don't suffocate farmer
 for _,n in pairs({"farming:melon_8", "farming:pumpkin_8"}) do
-	local def = minetest.registered_nodes["farming:melon_8"]
+	local def = minetest.registered_nodes[n]
 	if def then
 		local groups = table.copy(def.groups or {})
 		groups.disable_suffocation = 1
-		minetest.override_item("farming:melon_8", {
+		minetest.override_item(n, {
 		  groups = groups
 		})
 	end
