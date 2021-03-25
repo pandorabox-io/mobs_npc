@@ -83,6 +83,7 @@ mod_items.bucket = {
 
 -- https://notabug.org/TenPlus1/farming
 mod_items.farming = {
+	{"default:gold_ingot 1", "farming:artichoke", 1, 5, 10, 40, true},
 	{"default:gold_ingot 1", "farming:beans", 1, 5, 10, 40, true},
 	{"default:gold_ingot 1", "farming:beetroot", 1, 5, 10, 40, true},
 	{"default:gold_ingot 1", "farming:blackberry", 1, 5, 10, 40, true},
@@ -98,6 +99,7 @@ mod_items.farming = {
 	{"default:gold_ingot 1", "farming:grapes", 1, 5, 10, 40, true},
 	{"default:gold_ingot 1", "farming:lettuce", 1, 5, 10, 40, true},
 	{"default:gold_ingot 1", "farming:onion", 1, 5, 10, 40, true},
+	{"default:gold_ingot 1", "farming:parsley", 1, 5, 10, 40, true},
 	{"default:gold_ingot 1", "farming:pea_pod", 1, 5, 10, 40, true},
 	{"default:gold_ingot 1", "farming:pepper", 1, 5, 10, 60, true},
 	{"default:gold_ingot 1", "farming:pepper_red", 1, 5, 10, 50, true},
