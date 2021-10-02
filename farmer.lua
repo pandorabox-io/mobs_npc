@@ -66,6 +66,7 @@ local crops = {
 	["farming:rice_8"] = {"farming:rice_1", "farming:seed_rice"},
 	["farming:rye_8"] = {"farming:rye_1", "farming:seed_rye"},
 	["farming:soy_7"] = {"farming:soy_1", "farming:soy_pod"},
+	["farming:sunflower_8"] = {"farming:sunflower_1", "farming:seed_sunflower"},
 	["farming:tomato_8"] = {"farming:tomato_1", "farming:tomato"},
 	["farming:wheat_8"] = {"farming:wheat_1", "farming:seed_wheat"},
 	["farming:vanilla_8"] = {"farming:vanilla_1", "farming:vanilla"},
@@ -84,6 +85,7 @@ local seed_crafts = {
 	["farming:pepper_yellow"] = {{"farming:peppercorn", 1}},
 	["farming:pineapple"] = {{"farming:pineapple_top", 1}, {"farming:pineapple_ring", 5}},
 	["farming:pumpkin_8"] = {{"farming:pumpkin_slice", 4}},
+	["farming:sunflower"] = {{"farming:seed_sunflower", 5}},
 }
 
 -- Lookup for the seed crafts
