@@ -24,6 +24,8 @@ mobs:register_mob("mobs_npc:npc", {
 	textures = {
 		{"mobs_npc.png"},
 		{"mobs_npc2.png"},  -- Female skin by nuttmeg20
+		{"mobs_npc3.png"},  -- Male skin by swagman181818
+		{"mobs_npc4.png"},  -- Female skin by Sapphire16
 	},
 	child_texture = {
 		{"mobs_npc_baby.png"},  -- Derpy baby skin by AmirDerAssassine
