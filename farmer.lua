@@ -5,7 +5,7 @@ local S = mobs.intllib
 local skins = {}
 for a=1, 2 do
 	for b=1, 3 do
-		for c=1, 2 do
+		for c=1, 4 do
 			table.insert(skins, {
 				"(mobs_farmer_legs_"..a..".png"..
 				"^mobs_farmer_shirt_"..b..".png)"..
