@@ -215,8 +215,8 @@ local function plant_crop(self, pos, crop)
 end
 
 local function find_nodes(pos)
-	local pos1 = {x=pos.x-1, y=pos.y-1, z=pos.z-1}
-	local pos2 = {x=pos.x+1, y=pos.y+1, z=pos.z+1}
+	local pos1 = {x=pos.x-2, y=pos.y-1, z=pos.z-2}
+	local pos2 = {x=pos.x+2, y=pos.y+1, z=pos.z+2}
 	return minetest.find_nodes_in_area(pos1, pos2, look_for_nodes)
 end
 
@@ -261,7 +261,14 @@ local function do_farming(self)
 	pos.y = pos.y - 0.5
 	pos = vector.round(pos)
 	-- Find a node near it
-	for _,p in pairs(find_nodes(pos)) do
+	local nodes
+	if crops[self.standing_in] then
+		nodes = {pos}
+		self.standing_in = "air"
+	else
+		nodes = find_nodes(pos)
+	end
+	for _,p in pairs(nodes) do
 		local nn = minetest.get_node(p).name
 		if crops[nn] then
 			if soil_below(p, nn) then
@@ -393,7 +400,7 @@ mobs:register_mob("mobs_npc:farmer", {
 			return
 		end
 		self.farming_timer = self.farming_timer - dtime
-		if self.farming_timer <= 0 then
+		if self.farming_timer <= 0 or crops[self.standing_in] then
 			if do_farming(self) then
 				-- Something was "farmed", likely there is more, so check again soon
 				self.farming_timer = math.random(1, 3)
