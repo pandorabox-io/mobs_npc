@@ -263,8 +263,10 @@ local function do_farming(self)
 	-- Find a node near it
 	local nodes
 	if crops[self.standing_in] then
-		nodes = {pos}
 		self.standing_in = "air"
+	end
+	if crops[minetest.get_node(pos).name] then
+		nodes = {pos}
 	else
 		nodes = find_nodes(pos)
 	end
