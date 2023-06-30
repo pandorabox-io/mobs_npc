@@ -331,7 +331,10 @@ mobs:register_mob("mobs_npc:farmer", {
 	walk_velocity = 1,
 	run_velocity = 2,
 	jump = true,
-	drops = nil,  -- No drops because items are dropped in custom on_die function
+	drops = {
+		{name = "default:gold_lump", chance = 2, min = 0, max = 5},
+		{name = "farming:hoe_wood", chance = 1, min = 1, max = 1},
+	},
 	water_damage = 0,
 	lava_damage = 4,
 	light_damage = 0,
@@ -415,11 +418,6 @@ mobs:register_mob("mobs_npc:farmer", {
 	on_die = function(self, pos)
 		-- Items that will be dropped
 		local to_drop = {}
-		-- Random hoe
-		local hoes = {"farming:hoe_wood", "farming:hoe_stone", "farming:hoe_steel"}
-		table.insert(to_drop, {hoes[math.random(3)], 1})
-		-- Some gold lumps
-		table.insert(to_drop, {"default:gold_lump", math.random(5)})
 		-- Most of the items in inventory
 		for item, count in pairs(self.inv or {}) do
 			if count < 10 then
