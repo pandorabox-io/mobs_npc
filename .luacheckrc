@@ -1,21 +1,12 @@
-unused_args = false
-allow_defined_top = true
 
 globals = {
-    "minetest", "mobs",
+	"mobs",
 }
 
 read_globals = {
-    string = {fields = {"split"}},
-    table = {fields = {"copy", "getn"}},
-
-    -- Builtin
-    "vector", "ItemStack",
-    "dump", "DIR_DELIM", "VoxelArea", "Settings",
-
-    -- MTG
-    "default", "sfinv", "creative",
-	
-	-- Mod Deps
+	"string.split", "table.copy",
+	"vector", "ItemStack", "dump",
+    "minetest",
 	"lucky_block",
+	"farming",
 }

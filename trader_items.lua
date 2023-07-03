@@ -312,7 +312,7 @@ minetest.register_on_mods_loaded(function()
 	for k,v in pairs(mobs.trader.items) do
 		local valid, err_msg = is_valid_trade(k, v)
 		if not valid then
-			minetest.log("error", "[mobs_npc] "..err_msg)
+			minetest.log("warning", "[mobs_npc] "..err_msg)
 			minetest.log("action", "[mobs_npc] removing trade: "..dump(v))
 			table.remove(mobs.trader.items, k)
 		end

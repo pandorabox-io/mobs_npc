@@ -87,8 +87,6 @@ local function show_trades(self, clicker)
 
 	local formspec =
 		"size[8,10]"..
-		default.gui_bg_img..
-		default.gui_slots..
 		"label[0.0,-0.1;"..S("@1's stock:", self.nametag).."]"..
 		"list[current_player;main;0,6;8,4;]"
 
