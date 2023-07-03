@@ -84,6 +84,7 @@ mod_items.bucket = {
 -- https://notabug.org/TenPlus1/farming
 mod_items.farming = {
 	{"default:gold_ingot 1", "farming:artichoke", 1, 5, 10, 40, true},
+	{"default:gold_ingot 1", "farming:asparagus", 1, 5, 10, 40, true},
 	{"default:gold_ingot 1", "farming:beans", 1, 5, 10, 40, true},
 	{"default:gold_ingot 1", "farming:beetroot", 1, 5, 10, 40, true},
 	{"default:gold_ingot 1", "farming:blackberry", 1, 5, 10, 40, true},
@@ -95,7 +96,9 @@ mod_items.farming = {
 	{"default:gold_ingot 1", "farming:coffee_beans", 1, 5, 10, 40, true},
 	{"default:gold_ingot 1", "farming:corn", 1, 5, 10, 40, true},
 	{"default:gold_ingot 1", "farming:cucumber", 1, 5, 20, 10, true},
+	{"default:gold_ingot 1", "farming:eggplant", 1, 5, 10, 40, true},
 	{"default:gold_ingot 1", "farming:garlic", 1, 5, 10, 40, true},
+	{"default:gold_ingot 1", "farming:ginger", 1, 5, 10, 40, true},
 	{"default:gold_ingot 1", "farming:grapes", 1, 5, 10, 40, true},
 	{"default:gold_ingot 1", "farming:lettuce", 1, 5, 10, 40, true},
 	{"default:gold_ingot 1", "farming:onion", 1, 5, 10, 40, true},
@@ -116,8 +119,11 @@ mod_items.farming = {
 	{"default:gold_ingot 1", "farming:seed_rye", 1, 5, 10, 40, true},
 	{"default:gold_ingot 1", "farming:seed_wheat", 1, 5, 10, 10, true},
 	{"default:gold_ingot 1", "farming:soy_pod", 1, 5, 10, 40, true},
+	{"default:gold_ingot 1", "farming:spinach", 1, 5, 10, 40, true},
 	{"default:gold_ingot 1", "farming:tomato", 1, 5, 20, 10, true},
 	{"default:gold_ingot 1", "farming:vanilla", 1, 5, 10, 40, true},
+
+	{"default:gold_ingot 1", "ethereal:strawberry", 1, 5, 10, 50, true},
 
 	{"farming:melon_8 1", "default:gold_ingot", 1, 3, 10, 40, nil},
 	{"farming:pumpkin_8 1", "default:gold_ingot", 1, 3, 10, 40, nil},
