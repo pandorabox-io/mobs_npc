@@ -30,61 +30,28 @@ local soils = {
 
 -- Crops ready to harvest and replant
 -- [ripe_plant] = {new_plant, seed_item, <extra_item>}
-local crops = {
-	["farming:artichoke_5"] = {"farming:artichoke_1", "farming:artichoke"},
-	["farming:barley_7"] = {"farming:barley_1", "farming:seed_barley"},
-	["farming:beanpole_5"] = {"farming:beanpole_1", "farming:beans", "farming:beanpole"},
-	["farming:beetroot_5"] = {"farming:beetroot_1", "farming:beetroot"},
-	["farming:blackberry_4"] = {"farming:blackberry_1", "farming:blackberry"},
-	["farming:blueberry_4"] = {"farming:blueberry_1", "farming:blueberries"},
-	["farming:cabbage_6"] = {"farming:cabbage_1", "farming:cabbage"},
-	["farming:carrot_8"] = {"farming:carrot_1", "farming:carrot"},
-	["farming:chili_8"] = {"farming:chili_1", "farming:chili_pepper"},
-	["farming:cocoa_4"] = {"farming:cocoa_1", "farming:cocoa_beans"},
-	["farming:coffee_5"] = {"farming:coffee_1", "farming:coffee_beans"},
-	["farming:corn_8"] = {"farming:corn_1", "farming:corn"},
-	["farming:cotton_8"] = {"farming:cotton_1", "farming:seed_cotton"},
-	["farming:cucumber_4"] = {"farming:cucumber_1", "farming:cucumber"},
-	["farming:garlic_5"] = {"farming:garlic_1", "farming:garlic_clove"},
-	["farming:grapes_8"] = {"farming:grapes_1", "farming:grapes", "farming:trellis"},
-	["farming:hemp_8"] = {"farming:hemp_1", "farming:seed_hemp"},
-	["farming:lettuce_5"] = {"farming:lettuce_1", "farming:lettuce"},
-	["farming:melon_8"] = {"farming:melon_1", "farming:melon_slice"},
-	["farming:mint_4"] = {"farming:mint_1", "farming:seed_mint"},
-	["farming:oat_8"] = {"farming:oat_1", "farming:seed_oat"},
-	["farming:onion_5"] = {"farming:onion_1", "farming:onion"},
-	["farming:parsley_3"] = {"farming:parsley_1", "farming:parsley"},
-	["farming:pea_5"] = {"farming:pea_1", "farming:pea_pod"},
-	["farming:pepper_5"] = {"farming:pepper_1", "farming:peppercorn"},
-	["farming:pepper_6"] = {"farming:pepper_1", "farming:peppercorn"},
-	["farming:pepper_7"] = {"farming:pepper_1", "farming:peppercorn"},
-	["farming:pineapple_8"] = {"farming:pineapple_1", "farming:pineapple_top"},
-	["farming:potato_4"] = {"farming:potato_1", "farming:potato"},
-	["farming:pumpkin_8"] = {"farming:pumpkin_1", "farming:pumpkin_slice"},
-	["farming:raspberry_4"] = {"farming:raspberry_1", "farming:raspberries"},
-	["farming:rhubarb_3"] = {"farming:rhubarb_1", "farming:rhubarb"},
-	["farming:rice_8"] = {"farming:rice_1", "farming:seed_rice"},
-	["farming:rye_8"] = {"farming:rye_1", "farming:seed_rye"},
-	["farming:soy_7"] = {"farming:soy_1", "farming:soy_pod"},
-	["farming:sunflower_8"] = {"farming:sunflower_1", "farming:seed_sunflower"},
-	["farming:tomato_8"] = {"farming:tomato_1", "farming:tomato"},
-	["farming:wheat_8"] = {"farming:wheat_1", "farming:seed_wheat"},
-	["farming:vanilla_8"] = {"farming:vanilla_1", "farming:vanilla"},
-	-- Empty beanpole/trellis
-	["farming:beanpole"] = {"farming:beanpole_1", "farming:beans", "farming:beanpole"},
-	["farming:trellis"] = {"farming:grapes_1", "farming:grapes", "farming:trellis"},
-}
+local crops = {}
+for name, def in pairs(farming.registered_plants) do
+	local t = {def.crop.."_1", def.seed}
+	crops[def.crop.."_"..def.steps] = t
+	if name ~= "farming:cocoa_beans" and def.trellis then
+		t[3] = def.trellis
+		crops[def.trellis] = t
+	end
+end
 
 -- Items that need to be crafted into seeds before planting
 -- [item] = {{output1, amount1}, {output2, amount2}, ...}
 local seed_crafts = {
 	["farming:garlic"] = {{"farming:garlic_clove", 8}},
 	["farming:melon_8"] = {{"farming:melon_slice", 4}},
+	["farming:pea_pod"] = {{"farming:peas", 1}},
 	["farming:pepper"] = {{"farming:peppercorn", 1}},
 	["farming:pepper_red"] = {{"farming:peppercorn", 1}},
 	["farming:pepper_yellow"] = {{"farming:peppercorn", 1}},
 	["farming:pineapple"] = {{"farming:pineapple_top", 1}, {"farming:pineapple_ring", 5}},
 	["farming:pumpkin_8"] = {{"farming:pumpkin_slice", 4}},
+	["farming:soy_pod"] = {{"farming:soy_beans", 1}},
 	["farming:sunflower"] = {{"farming:seed_sunflower", 5}},
 }
 
