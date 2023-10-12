@@ -22,7 +22,7 @@ mobs.trader = {
 
 local function set_random_name(self)
 	local name = tostring(mobs.trader.names[math.random(#mobs.trader.names)])
-	self.nametag = S("Trader @1", name)
+	self._nametag = S("Trader @1", name)
 	self:update_tag()
 end
 
@@ -73,8 +73,12 @@ local function show_trades(self, clicker)
 	if not self.day_count or not self.trade_count or not self.trades then
 		setup_trader(self)
 	end
-	if not self.nametag or self.nametag == "" or self.nametag == " " then
-		set_random_name(self)
+	if not self._nametag or self._nametag == "" or self._nametag == " " then
+		if self.nametag then
+			self.update_tag()  -- Fix nametag without setting a new name
+		else
+			set_random_name(self)
+		end
 	end
 	-- Check if player can trade with this trader
 	local player = clicker:get_player_name()
@@ -87,7 +91,7 @@ local function show_trades(self, clicker)
 
 	local formspec =
 		"size[8,10]"..
-		"label[0.0,-0.1;"..S("@1's stock:", self.nametag).."]"..
+		"label[0.0,-0.1;"..S("@1's stock:", self._nametag).."]"..
 		"list[current_player;main;0,6;8,4;]"
 
 	for i = 1, 10 do
