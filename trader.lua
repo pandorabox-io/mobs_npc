@@ -10,9 +10,14 @@ end)
 -- Define table containing names for use and shop items for sale
 mobs.trader = {
 	names = {
-		"Bob", "Duncan", "Bill", "Tom", "James", "Ian", "Lenny",
-		"Dylan", "Ethan", "Jhon", "Alex", "Steve", "Rory", "Brian",
-		"Joe", "Adam", "Will", "Billy", "Jhonny", "Bobby",
+		"Adam",   "Alex",   "Andy",   "Ben",   "Bill",
+		"Billy",  "Bob",    "Brian",  "Carl",  "Charles",
+		"Chris",  "Daniel", "Duncan", "Dylan", "Elon",
+		"Ethan",  "Frank",  "Ian",    "Isaac", "Jack",
+		"Jacob",  "James",  "Jeff",   "Joe",   "John",
+		"Johnny", "Ken",    "Larry",  "Lenny", "Liam",
+		"Luke",   "Mark",   "Owen",   "Rory",  "Sam",
+		"Steve",  "Toby",   "Tom",    "Wayne", "Will",
 	},
 	items = {
 		-- {item, currency, min price, max price, daily stock, rarity}
